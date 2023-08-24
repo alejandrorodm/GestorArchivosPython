@@ -1,4 +1,4 @@
-# GestorArchivosPython
+# Gestor de Archivos para Python
 
 ¿Buscas ordenar, limpiar o simplemente hacerte la vida más fácil con tus archivos? Aquí te traigo la solución.
 
