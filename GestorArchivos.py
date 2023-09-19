@@ -7,6 +7,7 @@ import json
 import datetime
 from gulagcleaner.gulagcleaner_extract import deembed
 from gulagcleaner.gulagcleaner_extract import extract_metadata
+from tensorflow import truediv
 
 
 class GestorArchivos:
@@ -227,41 +228,47 @@ class GestorArchivos:
         for nombrearchivo in GestorArchivos.archivosArrayList:
             print("Archivo a organizar y limpiar " + nombrearchivo)
             archivo = os.path.join(GestorArchivos.getDirectorio(), nombrearchivo)
-            data = str(extract_metadata(archivo))
 
-            # Eliminar las comillas simples alrededor del string y convertirlo a JSON válido
-            data = data.replace("'", "\"")
+            ## Obtener informacion Universidad, Asignatura...
 
-            # Analizar el string JSON
-            parsed_data = json.loads(data)
+            try:
+                data = str(extract_metadata(archivo))
 
-            # Obtener cada valor por separado
-            asignatura = parsed_data['Asignatura']
-            curso_grado = parsed_data['Curso y Grado']
-            facultad = parsed_data['Facultad']
-            universidad = parsed_data['Universidad']
+                # Eliminar las comillas simples alrededor del string y convertirlo a JSON válido
+                data = data.replace("'", "\"")
 
-            # Imprimir los valores obtenidos
-            print("Asignatura:", asignatura)
-            print("Curso y Grado:", curso_grado)
-            print("Facultad:", facultad)
-            print("Universidad:", universidad)
+                # Analizar el string JSON
+                parsed_data = json.loads(data)
 
-            carpetaUni = ""
-            carpetaFacultad = ""
-            carpetaAsignatura = ""
-            carpetaCursoGrado = ""
+                # Obtener cada valor por separado
+                asignatura = parsed_data['Asignatura']
+                curso_grado = parsed_data['Curso y Grado']
+                facultad = parsed_data['Facultad']
+                universidad = parsed_data['Universidad']
 
-            ## Comprobamos la fecha de creacion del archivo para saber que metodo usar
-            info_archivo = os.stat(archivo)
+                # Imprimir los valores obtenidos
+                print("Asignatura:", asignatura)
+                print("Curso y Grado:", curso_grado)
+                print("Facultad:", facultad)
+                print("Universidad:", universidad)
 
-            # Obtener la fecha de creación del archivo
-            fecha_creacion = datetime.datetime.fromtimestamp(info_archivo.st_ctime)
-            print(fecha_creacion)
+                carpetaUni = ""
+                carpetaFacultad = ""
+                carpetaAsignatura = ""
+                carpetaCursoGrado = ""
 
-            # Comparar la fecha de creación con el 8/5/2023
-            fecha_limite = datetime.datetime(2023, 5, 8)
+                ## Comprobamos la fecha de creacion del archivo para saber que metodo usar
+                info_archivo = os.stat(archivo)
 
+                # Obtener la fecha de creación del archivo
+                fecha_creacion = datetime.datetime.fromtimestamp(info_archivo.st_ctime)
+                print(fecha_creacion)
+
+                # Comparar la fecha de creación con el 8/5/2023
+                fecha_limite = datetime.datetime(2023, 5, 8)
+
+            except Exception as e:
+                print("Error:", str(e))
 
             try:
                 carpetaUni = os.path.join(GestorArchivos.getDirectorio(), universidad)
