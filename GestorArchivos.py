@@ -232,19 +232,13 @@ class GestorArchivos:
             ## Obtener informacion Universidad, Asignatura...
 
             try:
-                data = str(extract_metadata(archivo))
-
-                # Eliminar las comillas simples alrededor del string y convertirlo a JSON válido
-                data = data.replace("'", "\"")
-
-                # Analizar el string JSON
-                parsed_data = json.loads(data)
+                metadata = extract_metadata(archivo)
 
                 # Obtener cada valor por separado
-                asignatura = parsed_data['Asignatura']
-                curso_grado = parsed_data['Curso y Grado']
-                facultad = parsed_data['Facultad']
-                universidad = parsed_data['Universidad']
+                asignatura = metadata['Asignatura']
+                curso_grado = metadata['Curso y Grado']
+                facultad = metadata['Facultad']
+                universidad = metadata['Universidad']
 
                 # Imprimir los valores obtenidos
                 print("Asignatura:", asignatura)
@@ -269,6 +263,7 @@ class GestorArchivos:
 
             except Exception as e:
                 print("Error:", str(e))
+                break;
 
             try:
                 carpetaUni = os.path.join(GestorArchivos.getDirectorio(), universidad)
