@@ -311,55 +311,86 @@ class GestorArchivos:
         repetidos = GestorArchivos.getListado().copy()
         pattern0 = r"(.*)\.([^\.]+)$"
         r0 = re.compile(pattern0)
+        archivos_a_eliminar = []
 
-        for i in range(len(repetidos)):
-            fileName = repetidos[i]
+        for fileName in repetidos:
             m0 = r0.match(fileName)
             file = os.path.join(GestorArchivos.getDirectorio(), fileName)
 
             if m0 and not os.path.isdir(file):
-                repetidos[i] = m0.group(1)
+                filename = m0.group(1)
 
         listaRepetidos = []
 
+        ## Copiamos la lista repetidos en listaRepetidos
         for i in range(len(repetidos)):
             listaRepetidos.append(repetidos[i])
 
         print("")
 
         for i in range(len(listaRepetidos) - 1):
+            # Patron archivo (1)
             pattern = r"(.*) \(([0-9]+)\)"
             r = re.compile(pattern)
             m = r.match(listaRepetidos[i])
             m2 = r.match(listaRepetidos[i + 1])
+
+            # Patron archivo - copia.tipo
             pattern3 = r"(.*) \- copia$"
             r3 = re.compile(pattern3)
             m3 = r3.match(listaRepetidos[i])
 
-            if m:
-                archivoPosibleRep = m.group(1)
+            if(m3 is None):
+                m3 = r3.match(listaRepetidos[i+1])
+            else:
+                print("SI " + m3.group(1))
 
-                if m2 and m.group(1) == m2.group(1):
+            #Pattern que utilizamos para separar cada archivo y su tipo
+            patternTipo = r"^(.*?)\.([^.]+)$"
+            rTipo = re.compile(patternTipo)
+            archivoSiguienteSinTipo = rTipo.match(listaRepetidos[i+1])
+
+
+            if m:
+                print("Archivo que coincide con el patron (posible repetido): " + listaRepetidos[i] + ' coincide con: ' + listaRepetidos[i + 1])
+
+                #Si coincide, implica que el siguiente será otra copia, o el archivo original (el primero)
+                print(m.group(1) + ' y ' + listaRepetidos[i + 1])
+
+
+                ## Si esto se ejecuta, implica que hay otro archivo tambien que cumple con la expresion regular
+                if m2 and m.group(1) == m2.group(1): ## Si tienen el mismo nombre base
                     GestorArchivos.archivosArrayList.append(GestorArchivos.getListado()[i])
-                    GestorArchivos.informe("Archivo " +GestorArchivos.getListado()[i] + " repetido eliminado.\n")
+                    GestorArchivos.informe += "Archivo " +GestorArchivos.getListado()[i] + " repetido eliminado.\n"
                     file1 = os.path.join(GestorArchivos.getDirectorio(),GestorArchivos.archivosArrayList[0])
                     os.remove(file1)
                     GestorArchivos.archivosArrayList.clear()
                     listaRepetidos.remove(i)
                     i -= 1
-                elif m.group(1) == listaRepetidos[i + 1]:
+
+                ## Si no se cumplen las condiciones anteriores y el nombre base del archivo actual (m.group(1))
+                # sea igual al nombre base del siguiente archivo en listaRepetidos, se considera que el archivo actual
+                # y el siguiente archivo son duplicados
+                ##
+                elif m.group(1) == archivoSiguienteSinTipo.group(1):
+                    print("Se han encontrado archivos repetidos: " + m.group(1))
                     GestorArchivos.archivosArrayList.append(GestorArchivos.getListado()[i])
-                    GestorArchivos.informe("Archivo " + GestorArchivos.getListado()[i] + " repetido eliminado.\n")
+                    GestorArchivos.informe+= "Archivo " + GestorArchivos.getListado()[i] + " repetido eliminado.\n"
                     file1 = os.path.join(GestorArchivos.getDirectorio(), GestorArchivos.archivosArrayList[0])
                     os.remove(file1)
                     GestorArchivos.archivosArrayList.clear()
+
+                    for repetido in listaRepetidos:
+                        print(" ARCHIVOS DE LISTA REPETIDOS " + repetido)
                     listaRepetidos.remove(i)
                     i -= 1
 
             if m3:
-                if m3.group(1) == listaRepetidos[i + 1]:
+                print("Archivo que coincide con el patron (posible repetido): " + listaRepetidos[i] + ' coincide con: ' + listaRepetidos[i + 1])
+
+                if m3.group(1) == archivoSiguienteSinTipo.group(1):
                     GestorArchivos.archivosArrayList.append(GestorArchivos.getListado()[i])
-                    GestorArchivos.informe("Archivo " + GestorArchivos.getListado()[i] + " repetido eliminado.\n")
+                    GestorArchivos.informe+= "Archivo " + GestorArchivos.getListado()[i] + " repetido eliminado.\n"
                     file1 = os.path.join(GestorArchivos.getDirectorio(), GestorArchivos.archivosArrayList[0])
                     os.remove(file1)
                     GestorArchivos.archivosArrayList.clear()
@@ -369,13 +400,16 @@ class GestorArchivos:
         print("")
 
         try:
-            GestorArchivos.generarInforme()
-            print("Generado informe con los cambios ")
+            if(len(GestorArchivos.informe) != 0):
+                GestorArchivos.generarInforme()
+                print("Generado informe con los cambios ")
+            else:
+                print("No se ha eliminado ningun archivo")
         except FileNotFoundError as e:
             print(e)
 
-        GestorArchivos.resetearListas()
-        GestorArchivos.resetearInforme()
+        GestorArchivos.resetearlistas()
+        GestorArchivos.resetearinforme()
 
     @staticmethod
     def generarInforme():
