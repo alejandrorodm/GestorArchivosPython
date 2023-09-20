@@ -318,7 +318,7 @@ class GestorArchivos:
             file = os.path.join(GestorArchivos.getDirectorio(), fileName)
 
             if m0 and not os.path.isdir(file):
-                filename = m0.group(1)
+                fileName = m0.group(1)
 
         listaRepetidos = []
 
