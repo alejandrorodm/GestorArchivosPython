@@ -3,12 +3,9 @@ import re
 import shutil
 import time
 import zipfile
-import json
 import datetime
 from gulagcleaner.gulagcleaner_extract import deembed
 from gulagcleaner.gulagcleaner_extract import extract_metadata
-from tensorflow import truediv
-
 
 class GestorArchivos:
     criterio = ""
@@ -308,35 +305,32 @@ class GestorArchivos:
 
     @staticmethod
     def eliminarRepetidos():
-        repetidos = GestorArchivos.getListado().copy()
+        repetidos = GestorArchivos.getListado().copy()[::-1]
         pattern0 = r"(.*)\.([^\.]+)$"
         r0 = re.compile(pattern0)
         archivos_a_eliminar = []
 
         for fileName in repetidos:
+            print("Archivo: " + fileName)
             m0 = r0.match(fileName)
             file = os.path.join(GestorArchivos.getDirectorio(), fileName)
 
             if m0 and not os.path.isdir(file):
                 fileName = m0.group(1)
 
-        listaRepetidos = []
+        listaRepetidos = list(repetidos)  # Copia la lista
 
-        ## Copiamos la lista repetidos en listaRepetidos
-        for i in range(len(repetidos)):
-            listaRepetidos.append(repetidos[i])
-
-        print("")
-
-        for i in range(len(listaRepetidos) - 1):
+        i = 0
+        while i < len(listaRepetidos)-1:
+            print(listaRepetidos[i])
             # Patron archivo (1)
-            pattern = r"(.*) \(([0-9]+)\)"
+            pattern = r"(.*) \((\d+)\)$"
             r = re.compile(pattern)
             m = r.match(listaRepetidos[i])
             m2 = r.match(listaRepetidos[i + 1])
 
             # Patron archivo - copia.tipo
-            pattern3 = r"(.*) \- copia$"
+            pattern3 = r"(.*) \- copia \(\d+\)$"
             r3 = re.compile(pattern3)
             m3 = r3.match(listaRepetidos[i])
 
@@ -365,7 +359,7 @@ class GestorArchivos:
                     file1 = os.path.join(GestorArchivos.getDirectorio(),GestorArchivos.archivosArrayList[0])
                     os.remove(file1)
                     GestorArchivos.archivosArrayList.clear()
-                    listaRepetidos.remove(i)
+                    del listaRepetidos[i]
                     i -= 1
 
                 ## Si no se cumplen las condiciones anteriores y el nombre base del archivo actual (m.group(1))
@@ -380,13 +374,11 @@ class GestorArchivos:
                     os.remove(file1)
                     GestorArchivos.archivosArrayList.clear()
 
-                    for repetido in listaRepetidos:
-                        print(" ARCHIVOS DE LISTA REPETIDOS " + repetido)
-                    listaRepetidos.remove(i)
+                    del listaRepetidos[i]
                     i -= 1
 
             if m3:
-                print("Archivo que coincide con el patron (posible repetido): " + listaRepetidos[i] + ' coincide con: ' + listaRepetidos[i + 1])
+                print("Archivo que coincide con el patron (copia): " + listaRepetidos[i] + ' coincide con: ' + listaRepetidos[i + 1])
 
                 if m3.group(1) == archivoSiguienteSinTipo.group(1):
                     GestorArchivos.archivosArrayList.append(GestorArchivos.getListado()[i])
@@ -394,17 +386,18 @@ class GestorArchivos:
                     file1 = os.path.join(GestorArchivos.getDirectorio(), GestorArchivos.archivosArrayList[0])
                     os.remove(file1)
                     GestorArchivos.archivosArrayList.clear()
-                    listaRepetidos.remove(i)
+                    del listaRepetidos[i]
                     i -= 1
 
+            i += 1
         print("")
 
         try:
-            if(len(GestorArchivos.informe) != 0):
+            if len(GestorArchivos.informe) != 0:
                 GestorArchivos.generarInforme()
                 print("Generado informe con los cambios ")
             else:
-                print("No se ha eliminado ningun archivo")
+                print("No se ha eliminado ningún archivo")
         except FileNotFoundError as e:
             print(e)
 
