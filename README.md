@@ -7,7 +7,7 @@ Este es un programa en Python que permite gestionar archivos de manera eficiente
 - **Eliminar** la primera parte del nombre de un archivo según un criterio definido por el usuario.
 - **Sustituir** una parte del nombre de un archivo por otra especificada.
 - **Mover** archivos de un determinado tipo a una carpeta específica.
-- **Eliminar publicidad** de archivos descargados desde Wuolah y organizarlos.
+- **Eliminar publicidad** de archivos descargados desde Wuolah usando la librería gulag-cleaner, y organizarlos. Este apartado con apuntes nuevos no funciona correctamente. Probar con una copia.
 - **Organizar** archivos en carpetas según su tipo.
 - **Eliminar archivos duplicados** en la carpeta de trabajo.
 
