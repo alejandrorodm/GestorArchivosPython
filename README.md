@@ -1,53 +1,48 @@
-# Gestor de Archivos - Menu
+# 📂 Gestor de Archivos
 
-Este es un programa en Python que permite gestionar archivos de manera eficiente a través de un menú interactivo. Facilita tareas como renombrado, organización, eliminación de publicidad y limpieza de archivos duplicados.
+Este es un programa en Java diseñado para ayudarte a gestionar tus archivos de forma rápida, sencilla y eficiente. A través de un menú interactivo, podrás realizar tareas comunes de organización, limpieza y modificación de archivos, sin complicaciones.
 
-## Características
+¿Tienes tu carpeta llena de archivos mal nombrados, duplicados o desorganizados? Este gestor es para ti.
 
-- **Eliminar** la primera parte del nombre de un archivo según un criterio definido por el usuario.
-- **Sustituir** una parte del nombre de un archivo por otra especificada.
-- **Mover** archivos de un determinado tipo a una carpeta específica.
-- **Eliminar publicidad** de archivos descargados desde Wuolah usando la librería gulag-cleaner, y organizarlos. Este apartado con apuntes nuevos no funciona correctamente. Probar con una copia.
-- **Organizar** archivos en carpetas según su tipo.
-- **Eliminar archivos duplicados** en la carpeta de trabajo.
+---
 
-## Requisitos
+## ✨ Características Principales
 
-- Python 3.x
-- Módulos estándar de Python:
-  - `os`
-  - `shutil`
-- Archivo `GestorArchivos.py`, que debe estar en el mismo directorio que este script.
+- 🔤 **Eliminar** la primera parte del nombre de un archivo según el criterio que definas.
+- 🔁 **Sustituir** fragmentos del nombre de los archivos por el texto que desees.
+- 📁 **Organizar** automáticamente tus archivos en carpetas por tipo (PDF, DOCX, JPG, etc.).
+- 📦 **Mover** archivos de un tipo específico a una carpeta determinada.
+- ☕ **Generar paquetes Java** a partir de archivos `.java` dispersos. Perfecto para estructurar proyectos que no tienen los paquetes bien definidos.
+- 📑 **Eliminar archivos duplicados** en la carpeta actual mediante expresiones regulares.
+- ❌ **Eliminar publicidad** de archivos descargados desde sitios como Wuolah o Gulag.
 
-## Instalación
+---
 
-1. Clona este repositorio:
+## ⚙️ Instalación
+
+1. Clona el repositorio:
    ```bash
    git clone https://github.com/alejandrorodm/GestorArchivosPython
    cd GestorArchivosPython
    ```
-2. Asegúrate de tener Python instalado en tu sistema.
+2. Asegúrate de tener Python instalado.
 
-## Uso
+3. Ejecuta el programa.
+  ```bash
+  python menu.py
+  ```
 
-Ejecuta el script principal para iniciar el menú interactivo:
+## 📋 Opciones del menú:
 
-```bash
-python menu.py
-```
+1. ✂️ Eliminar la primera parte del nombre de los archivos (definido por ti).
+2. 🔧 Sustituir un fragmento del nombre por otro personalizado.
+3. 🗃️ Crear una carpeta para un tipo de archivo específico y moverlos allí.
+4. 🧱 Crear paquetes Java a partir de los archivos .java encontrados.
+5. 🗂️ Organizar todos los archivos en carpetas por tipo (PDF, DOCX, JPG...).
+6. 🔍 Eliminar archivos duplicados dentro de la carpeta actual.
+7. 🧹 Borrar “wuolah-free” y “gulag-free” del nombre de los archivos (limpieza de publicidad).
+8. ❎ Salir del programa.
 
-### Opciones del menú:
+## 👨‍💻 Autor:
 
-1. Eliminar la primera parte del nombre de un archivo.
-2. Sustituir la primera parte del nombre de un archivo.
-3. Mover archivos de un tipo específico a una carpeta.
-4. Eliminar publicidad de Wuolah y organizar archivos.
-5. Organizar todos los archivos por tipo en carpetas.
-6. Eliminar archivos duplicados en la carpeta.
-7. Salir.
-
-## Autor
-
-- **Alejandro Rodríguez*
-
-
+- **Alejandro Rodríguez Moreno**
